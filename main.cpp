@@ -104,7 +104,7 @@ struct StaticU
 {
     static float computeDistance(U* that, float* xUpdated )        //10
     {
-        if (xUpdated != nullptr)
+        if (xUpdated != nullptr && that != nullptr)
         {
             std::cout << "U's x value: " << that->x << std::endl;
             that->x = *xUpdated;
