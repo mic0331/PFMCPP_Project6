@@ -36,13 +36,10 @@ T::T(int v, const char* p): value(v), name(p) {}
 
 struct Comparator                               //4
 {
-    T* compare(T* a, T* b) //5
+    T* compare(T& a, T& b) //5
     {
-        if (a != nullptr && b != nullptr)
-        {
-            if( a->value < b->value ) return a;
-            if( a->value > b->value ) return b;
-        }        
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;     
         return nullptr;
     }
 };
@@ -50,46 +47,36 @@ struct Comparator                               //4
 struct U
 {
     float x { 0 }, y{ 0 };
-    float computeDistance(float* xUpdated)      //12
+    float computeDistance(const float& xUpdated)      //12
     {
-        if (xUpdated != nullptr)
+        std::cout << "U's x value: " << this->x << std::endl;
+        this->x = xUpdated;
+        std::cout << "U's y updated value: " << this->x << std::endl;
+        while( std::abs( this->y - this->x ) > 0.001f )
         {
-            std::cout << "U's x value: " << this->x << std::endl;
-            this->x = *xUpdated;
-            std::cout << "U's y updated value: " << this->x << std::endl;
-            while( std::abs(this->y - this->x) > 0.001f )
-            {
-                this->y += .1f;
-            }
-            std::cout << "U's computeDistance updated value: " << this->y << std::endl;
-            return this->y * this->x;
+            this->y += .1f;
         }
-        std::cout << "Not allocated pointer " << std::endl;
-        return 0;
+        std::cout << "U's computeDistance updated value: " << this->y << std::endl;
+        return this->y * this->x;
     }
 };
 
 struct StaticU
 {
-    static float computeDistance(U* that, float* xUpdated )        //10
+    static float computeDistance(U& that, const float& xUpdated )        //10
     {
-        if (xUpdated != nullptr && that != nullptr)
+        std::cout << "U's x value: " << that.x << std::endl;
+        that.x = xUpdated;
+        std::cout << "U's y updated value: " << that.x << std::endl;
+        while( std::abs( that.y - that.x ) > 0.001f )
         {
-            std::cout << "U's x value: " << that->x << std::endl;
-            that->x = *xUpdated;
-            std::cout << "U's y updated value: " << that->x << std::endl;
-            while( std::abs(that->y - that->x) > 0.001f )
-            {
-                /*
-                write something that makes the distance between that->yand that->x get smaller
-                */
-                that->y += .1f;
-            }
-            std::cout << "U's computeDistance updated value: " << that->y << std::endl;
-            return that->y * that->x;
+            /*
+            write something that makes the distance between that->yand that->x get smaller
+            */
+            that.y += .1f;
         }
-        std::cout << "Not allocated pointer " << std::endl;
-        return 0;
+        std::cout << "U's computeDistance updated value: " << that.y << std::endl;
+        return that.y * that.x;
     }
 };
         
@@ -113,15 +100,15 @@ int main()
     T t2(8, "value 8");                                             //6
     
     Comparator f;                                            //7
-    auto* smaller = f.compare(&t1, &t2);                           //8
+    auto* smaller = f.compare(t1, t2);                           //8
     if(smaller != nullptr)
         std::cout << "the smaller one is << " << smaller->name << std::endl; //9
     std::cout << "Non allocated pointer" << std::endl; //9
     
     U distance1;
     float updatedValue = 5.f;
-    std::cout << "[static func] distance1's multiplied values: " << StaticU::computeDistance(&distance1, &updatedValue) << std::endl;                  //11
+    std::cout << "[static func] distance1's multiplied values: " << StaticU::computeDistance(distance1, updatedValue) << std::endl;                  //11
     
     U distance2;
-    std::cout << "[member func] distance2's multiplied values: " << distance2.computeDistance( &updatedValue ) << std::endl;
+    std::cout << "[member func] distance2's multiplied values: " << distance2.computeDistance( updatedValue ) << std::endl;
 }
