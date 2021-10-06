@@ -63,7 +63,7 @@ struct U
 
 struct StaticU
 {
-    static float computeDistance(U &that, const float& xUpdated )        //10
+    static float computeDistance(U& that, const float& xUpdated )        //10
     {
         std::cout << "U's x value: " << that.x << std::endl;
         that.x = xUpdated;
