@@ -47,7 +47,7 @@ struct Comparator                               //4
 struct U
 {
     float x { 0 }, y{ 0 };
-    float computeDistance(const float &xUpdated)      //12
+    float computeDistance(const float& xUpdated)      //12
     {
         std::cout << "U's x value: " << this->x << std::endl;
         this->x = xUpdated;
@@ -63,7 +63,7 @@ struct U
 
 struct StaticU
 {
-    static float computeDistance(U &that, const float &xUpdated )        //10
+    static float computeDistance(U &that, const float& xUpdated )        //10
     {
         std::cout << "U's x value: " << that.x << std::endl;
         that.x = xUpdated;
